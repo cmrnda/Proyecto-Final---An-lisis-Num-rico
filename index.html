@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Analisis Numerico - Punto de Equilibrio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">ANALISIS NUMERICO WEB</div>
+      <div class="user-info">
+        Carlos Manuel Miranda Aguirre<br>
+        CI 13759486 • Carrera de Informatica
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro-card">
+      <div class="intro-title">Un solo problema, muchos metodos</div>
+      <div class="intro-sub">
+        Se estudia el punto de equilibrio de una empresa aplicando varios metodos de raices sobre el mismo modelo de beneficio. La pagina permite ver los resultados numericos y la comparacion visual en graficas grandes.
+      </div>
+      <ul class="intro-list">
+        <li>Problema unico: beneficio de una empresa con demanda no lineal.</li>
+        <li>Metodos: biseccion, falsa posicion, punto fijo, Newton y secante.</li>
+        <li>Se muestra raiz exacta, tabla comparativa y dos graficas de comparacion.</li>
+      </ul>
+    </section>
+
+    <section class="topic-card">
+      <div class="topic-header">
+        <div class="topic-title">Punto de equilibrio con varios metodos</div>
+        <div class="topic-subtitle">Todos los metodos aplicados al mismo ejercicio practico</div>
+      </div>
+
+      <div class="topic-body">
+        <div class="topic-text">
+          <h3 class="mini-title">Modelo del problema</h3>
+          <p>precio(x) = P0 - k x</p>
+          <p>ingreso(x) = precio(x) x</p>
+          <p>costo(x) = cf + cv x</p>
+          <p>beneficio(x) = ingreso(x) - costo(x)</p>
+          <p>
+            El punto de equilibrio es el valor de x donde el beneficio es cero.
+            Sobre este mismo beneficio(x) se aplican los siguientes metodos de raices:
+          </p>
+          <ul>
+            <li>Biseccion</li>
+            <li>Falsa posicion</li>
+            <li>Punto fijo</li>
+            <li>Newton</li>
+            <li>Secante</li>
+          </ul>
+          <p>
+            Tambien se calcula la raiz exacta con la formula cuadratica para medir el error de cada metodo y comparar que tan rapido y preciso es cada uno.
+          </p>
+        </div>
+
+        <div class="right-column">
+          <div class="panel">
+            <div class="panel-title">Datos del problema</div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="P0">Precio base P0</label>
+                <input type="number" id="P0" value="100" step="1">
+              </div>
+              <div class="field">
+                <label for="kdem">Parametro demanda k</label>
+                <input type="number" id="kdem" value="0.1" step="0.01">
+              </div>
+              <div class="field">
+                <label for="cv">Costo variable cv</label>
+                <input type="number" id="cv" value="40" step="1">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="cf">Costo fijo cf</label>
+                <input type="number" id="cf" value="1000" step="10">
+              </div>
+              <div class="field">
+                <label for="lambdaFP">Lambda punto fijo</label>
+                <input type="number" id="lambdaFP" value="0.005" step="0.001">
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">Parametros numericos</div>
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="aInt">Extremo a (unidades)</label>
+                <input type="number" id="aInt" value="0" step="1">
+              </div>
+              <div class="field">
+                <label for="bInt">Extremo b (unidades)</label>
+                <input type="number" id="bInt" value="200" step="1">
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="x0pf">x0 punto fijo</label>
+                <input type="number" id="x0pf" value="50" step="1">
+              </div>
+              <div class="field">
+                <label for="x0n">x0 Newton</label>
+                <input type="number" id="x0n" value="50" step="1">
+              </div>
+              <div class="field">
+                <label for="x0sec">x0 secante</label>
+                <input type="number" id="x0sec" value="20" step="1">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="x1sec">x1 secante</label>
+                <input type="number" id="x1sec" value="150" step="1">
+              </div>
+              <div class="field">
+                <label for="tol">Tolerancia</label>
+                <input type="number" id="tol" value="0.0001" step="0.0001">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="maxIter">Max iteraciones</label>
+                <input type="number" id="maxIter" value="50" step="1">
+              </div>
+              <div class="field"></div>
+            </div>
+
+            <div class="btn-row">
+              <button onclick="solveAllMethods()">Calcular todos los metodos</button>
+              <button class="secondary" onclick="loadExample()">Ejemplo rapido</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-result" id="mainResultBox">
+        <div class="main-result-label">Punto de equilibrio principal</div>
+        <div class="main-result-value" id="mainResultValue">–</div>
+        <div class="main-result-sub" id="mainResultSub">
+          Ejecute el calculo para ver el punto de equilibrio y el metodo mas preciso.
+        </div>
+      </div>
+
+      <div id="resultRoot" class="result-box">
+        <p>Configure el ejercicio y presione <span class="highlight">Calcular todos los metodos</span>. Aqui se mostraran las raices, los errores y la tabla del metodo de biseccion.</p>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><span class="legend-color lc-func"></span> beneficio(x)</div>
+        <div class="legend-item"><span class="legend-color lc-eje"></span> eje x</div>
+        <div class="legend-item"><span class="legend-color lc-exact"></span> raiz exacta</div>
+        <div class="legend-item"><span class="legend-color lc-bis"></span> biseccion</div>
+        <div class="legend-item"><span class="legend-color lc-fal"></span> falsa posicion</div>
+        <div class="legend-item"><span class="legend-color lc-pf"></span> punto fijo</div>
+        <div class="legend-item"><span class="legend-color lc-new"></span> Newton</div>
+        <div class="legend-item"><span class="legend-color lc-sec"></span> secante</div>
+      </div>
+
+      <div class="plots-block">
+        <div class="plot-section">
+          <div class="plot-title">Grafica 1: beneficio y posicion de las raices</div>
+          <div class="plot-wrap">
+            <canvas id="canvasRoot" width="900" height="360"></canvas>
+          </div>
+        </div>
+
+        <div class="plot-section">
+          <div class="plot-title">Grafica 2: aproximaciones x(k) para cada metodo</div>
+          <div class="plot-wrap">
+            <canvas id="canvasIter" width="900" height="360"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        En la primera grafica se ve el ejercicio original: la curva de beneficio y donde cae la raiz. En la segunda grafica se observa como cada metodo se acerca a la misma solucion paso a paso, lo que permite comparar rapidez y estabilidad.
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
